@@ -97,7 +97,6 @@ const Home = ({ navigation }: any): React.JSX.Element => {
                         </View>
                     );
                 })}
-                <Button title="Add list" onPress={() => { setShowCreateModal(true); }} />
             </ScrollView>
             <FloatingAdd style={styles.floatingRightButton} onPress={() => { setShowCreateModal(true); }} />
         </SafeAreaView>
