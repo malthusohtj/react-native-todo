@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text } from 'react-native';
 import styles from '../styles/Style';
 import { CheckBox } from './SmallComponents';
+import { Menu, MenuTrigger, MenuOptions, MenuOption } from 'react-native-popup-menu';
+import ThreeDotsImg from '../assets/threedots.svg';
 
 const TodoItem = (props: any): React.JSX.Element => {
+    /**
+     * Component for each todo item in the details page
+     */
     let itemInfo = props.item;
     const [isDone, setIsDone] = useState(itemInfo.is_done);
 
     async function toggleDone() {
+        /**
+         * Updates the is_done field of the todo item
+         */
         await fetch('https://ttm-todo-sample.herokuapp.com/api/todos/' + itemInfo.id,
             {
                 method: 'PATCH',
@@ -36,8 +44,27 @@ const TodoItem = (props: any): React.JSX.Element => {
                     </Text>
                 </View>
             </View>
-            {/* <Button title="Update" onPress={() => { props.openUpdate(itemInfo.id); }} />
-            <Button title="Delete" onPress={() => { props.openDelete(itemInfo.id); }} /> */}
+            <View style={styles.menuButtonContainer}>
+                <Menu>
+                    <MenuTrigger>
+                        <ThreeDotsImg width={30} height={30} />
+                    </MenuTrigger>
+                    <MenuOptions customStyles={{
+                        optionsContainer: {
+                            marginTop: 35,
+                            paddingRight: 30,
+                            width: 'auto',
+                        },
+                    }}>
+                        <MenuOption onSelect={() => props.openUpdate(true)} >
+                            <Text style={styles.menuText}>Update</Text>
+                        </MenuOption>
+                        <MenuOption onSelect={() => props.openDelete(true)} >
+                            <Text style={styles.menuText}>Delete</Text>
+                        </MenuOption>
+                    </MenuOptions>
+                </Menu>
+            </View>
         </View>
     );
 };

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Button, Modal, TextInput } from 'react-native';
+import { InputModal, OptionModal } from './SmallComponents';
 
 const CreateItemModal = (props: any): React.JSX.Element => {
     /**
@@ -32,14 +33,15 @@ const CreateItemModal = (props: any): React.JSX.Element => {
     }
 
     return (
-        <Modal visible={props.visible}>
-            <View>
-                <Text>Add new item?</Text>
-                <TextInput onChangeText={text => setItemDesc(text)} />
-                <Button title="Add" onPress={createItem} />
-                <Button title="Cancel" onPress={() => { props.closeModal(false); }} />
-            </View>
-        </Modal>
+        <InputModal
+            visible={props.visible}
+            titleText="Add new task?"
+            placeholder="Enter description"
+            leftButtonText="Cancel"
+            rightButtonText="Create"
+            leftButtonOnPress={() => props.closeModal(false)}
+            rightButtonOnPress={createItem}
+            onChangeText={(text: any) => setItemDesc(text)} />
     );
 };
 
@@ -75,14 +77,15 @@ const UpdateItemModal = (props: any): React.JSX.Element => {
     }
 
     return (
-        <Modal visible={props.visible}>
-            <View>
-                <Text>Update item description?</Text>
-                <TextInput onChangeText={text => setDesc(text)} />
-                <Button title="Update" onPress={updateItem} />
-                <Button title="Cancel" onPress={() => { props.closeModal(false); }} />
-            </View>
-        </Modal>
+        <InputModal
+            visible={props.visible}
+            titleText="Update item description?"
+            placeholder={props.itemDesc}
+            leftButtonText="Cancel"
+            rightButtonText="Update"
+            leftButtonOnPress={() => props.closeModal(false)}
+            rightButtonOnPress={updateItem}
+            onChangeText={(text: any) => setDesc(text)} />
     );
 };
 
@@ -105,13 +108,13 @@ const DeleteItemModal = (props: any): React.JSX.Element => {
     }
 
     return (
-        <Modal visible={props.visible}>
-            <View>
-                <Text>Delete item?</Text>
-                <Button title="Delete" onPress={deleteItem} />
-                <Button title="Cancel" onPress={() => { props.closeModal(false); }} />
-            </View>
-        </Modal>
+        <OptionModal
+            visible={props.visible}
+            titleText="Delete item?"
+            leftButtonText="Cancel"
+            leftButtonOnPress={() => props.closeModal(false)}
+            rightButtonText="Delete"
+            rightButtonOnPress={deleteItem} />
     );
 };
 

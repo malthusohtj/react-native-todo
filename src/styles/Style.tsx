@@ -2,6 +2,7 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
     outerMostContainer: {
+        flex: 1,
         flexDirection: 'column',
         justifyContent: 'flex-start',
         backgroundColor: 'white',
@@ -49,24 +50,27 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        // backgroundColor: 'red',
     },
     itemCheckTextContainer: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
+        alignItems: 'center',
+        flex: 10,
     },
     itemTextContainer: {
         // flex
         flexDirection: 'column',
         justifyContent: 'center',
-        // box
-        paddingLeft: 5,
     },
     itemText: {
         fontSize: 20,
         color: 'black',
         textAlign: 'left',
-        // backgroundColor: 'green',
+        paddingLeft: 20,
+        paddingRight: 10,
+    },
+    menuButtonContainer: {
+        flex: 1,
     },
     divider: {
         height: 1,
@@ -98,6 +102,70 @@ const styles = StyleSheet.create({
         // inner positioning
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    listHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: 'white',
+        paddingHorizontal: 40,
+        paddingVertical: 10,
+        elevation: 7,
+    },
+    listHeaderButtons: {
+        flexDirection: 'row',
+    },
+    listHeaderTitle: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        color: 'black',
+        marginLeft: 20,
+    },
+    menuText: {
+        color: 'black',
+    },
+    modalInnerContainer: {
+        // positioning
+        marginVertical: 'auto',
+        // box
+        marginHorizontal: 20,
+        borderRadius: 20,
+        // design
+        backgroundColor: 'white',
+        elevation: 10,
+        // flex
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+    },
+    modalTitle: {
+        fontSize: 20,
+        color: 'black',
+        marginVertical: 20,
+    },
+    modalInput: {
+        fontSize: 20,
+        color: 'black',
+        // backgroundColor: 'grey',
+        borderWidth: 1,
+        borderColor: 'grey',
+        width: '80%',
+        marginBottom: 20,
+    },
+    modalButtonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: '100%',
+        marginBottom: 20,
+    },
+    loadingContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        flex: 1,
+    },
+    loadingText: {
+        marginTop: 10,
+        fontSize: 20,
     },
 });
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Button, Modal, TextInput } from 'react-native';
+import { InputModal, OptionModal } from './SmallComponents';
 
 const CreateListModal = (props: any): React.JSX.Element => {
     /**
@@ -31,14 +31,15 @@ const CreateListModal = (props: any): React.JSX.Element => {
     }
 
     return (
-        <Modal visible={props.visible}>
-            <View>
-                <Text>Create new list?</Text>
-                <TextInput onChangeText={text => setListName(text)} />
-                <Button title="Create" onPress={createList} />
-                <Button title="Cancel" onPress={() => { props.closeModal(false); }} />
-            </View>
-        </Modal>
+        <InputModal
+            visible={props.visible}
+            titleText="Create new list?"
+            placeholder="Enter name of list"
+            leftButtonText="Cancel"
+            rightButtonText="Create"
+            leftButtonOnPress={() => props.closeModal(false)}
+            rightButtonOnPress={createList}
+            onChangeText={(text: any) => setListName(text)} />
     );
 };
 
@@ -74,14 +75,15 @@ const UpdateListModal = (props: any): React.JSX.Element => {
     }
 
     return (
-        <Modal visible={props.visible}>
-            <View>
-                <Text>Update name of todo list</Text>
-                <TextInput onChangeText={text => setListName(text)} />
-                <Button title="Update" onPress={updateList} />
-                <Button title="Cancel" onPress={() => { props.closeModal(false); }} />
-            </View>
-        </Modal>
+        <InputModal
+            visible={props.visible}
+            titleText="Update name of list?"
+            placeholder={props.listName}
+            leftButtonText="Cancel"
+            rightButtonText="Update"
+            leftButtonOnPress={() => props.closeModal(false)}
+            rightButtonOnPress={updateList}
+            onChangeText={(text: any) => setListName(text)} />
     );
 };
 
@@ -125,13 +127,13 @@ const DeleteListModal = (props: any): React.JSX.Element => {
         }
     }
     return (
-        <Modal visible={props.visible}>
-            <View>
-                <Text>Delete list?</Text>
-                <Button title="Delete" onPress={deleteList} />
-                <Button title="Cancel" onPress={() => { props.closeModal(false); }} />
-            </View>
-        </Modal>
+        <OptionModal
+            visible={props.visible}
+            titleText="Delete list?"
+            leftButtonText="Cancel"
+            leftButtonOnPress={() => props.closeModal(false)}
+            rightButtonText="Delete"
+            rightButtonOnPress={deleteList} />
     );
 };
 

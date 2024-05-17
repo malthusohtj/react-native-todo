@@ -1,20 +1,30 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, SafeAreaView, Button } from 'react-native';
+import { Text, View, ScrollView, SafeAreaView, Button } from 'react-native';
 import styles from '../styles/Style';
 import TodoItem from '../components/TodoItem';
 import { CreateItemModal, DeleteItemModal, UpdateItemModal } from '../components/ItemModals';
+import { UpdateListModal, DeleteListModal } from '../components/ListModals';
+import { FloatingAdd } from '../components/SmallComponents';
+import { Menu, MenuTrigger, MenuOptions, MenuOption } from 'react-native-popup-menu';
+import ThreeDotsImg from '../assets/threedots.svg';
+import { LoadingModal } from '../components/SmallComponents';
 
-const Details = ({ route }: any): React.JSX.Element => {
+const Details = ({ route, navigation }: any): React.JSX.Element => {
+    const [isLoading, setLoading] = useState<boolean>(true);
     const [todoItems, setTodoItems] = useState([]);
-    const [selectedItem, setSelectedItem] = useState<number>();
-    const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
-    const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
-    const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+    const [selectedItem, setSelectedItem] = useState<any>();
+    const [listName, setListName] = useState();
+    const [showUpdateListModal, setShowUpdateListModal] = useState<boolean>(false);
+    const [showDeleteListModal, setShowDeleteListModal] = useState<boolean>(false);
+    const [showCreateItemModal, setShowCreateItemModal] = useState<boolean>(false);
+    const [showUpdateItemModal, setShowUpdateItemModal] = useState<boolean>(false);
+    const [showDeleteItemModal, setShowDeleteItemModal] = useState<boolean>(false);
 
     let { listId } = route.params;
 
     useEffect(() => {
+        fetchTodoList();
         fetchTodoItems();
     }, []);
 
@@ -37,70 +47,121 @@ const Details = ({ route }: any): React.JSX.Element => {
             }).then((data) => {
                 let sortedItems = data.todos.sort((a: any, b: any) => { return a.id - b.id; });
                 setTodoItems(sortedItems);
+                setLoading(false);
             });
         } catch (e) {
             console.log(e);
         }
     }
 
-    function openUpdate(id: number) {
+    async function fetchTodoList() {
         /**
-         * Opens the update todo item modal
+         * Fetches metadata for this particular list
          */
-        setSelectedItem(id);
-        setShowUpdateModal(true);
+        await fetch('https://ttm-todo-sample.herokuapp.com/api/todo-lists/' + listId,
+            {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+            }
+        ).then((res) => {
+            return res.json();
+        }).then((data) => {
+            setListName(data.name);
+        });
     }
 
-    function openDelete(id: number) {
+    async function closeListUpdate(submitted: boolean) {
         /**
-         * Opens the delete todo item modal
+         * Closes the update todo list modal
          */
-        setSelectedItem(id);
-        setShowDeleteModal(true);
+        if (submitted) { await fetchTodoList(); }
+        setShowUpdateListModal(false);
     }
 
-    async function closeCreate(submitted: boolean) {
+    async function closeListDelete(submitted: boolean) {
+        /**
+         * Closes the delete todo list modal
+         */
+        setShowDeleteListModal(false);
+        if (submitted) { navigation.goBack(); }
+    }
+
+    async function closeItemCreate(submitted: boolean) {
         /**
          * Closes the create todo item modal
          */
         if (submitted) { await fetchTodoItems(); }
-        setShowCreateModal(false);
+        setShowCreateItemModal(false);
     }
 
-    async function closeUpdate(submitted: boolean) {
+    async function closeItemUpdate(submitted: boolean) {
         /**
          * Closes the update todo item modal
          */
         if (submitted) { await fetchTodoItems(); }
-        setShowUpdateModal(false);
+        setShowUpdateItemModal(false);
     }
 
-    async function closeDelete(submitted: boolean) {
+    async function closeItemDelete(submitted: boolean) {
         /**
          * Closes the delete todo item modal
          */
         if (submitted) { await fetchTodoItems(); }
-        setShowDeleteModal(false);
+        setShowDeleteItemModal(false);
     }
 
     return (
         <SafeAreaView style={styles.outerMostContainer}>
-            <CreateItemModal visible={showCreateModal} closeModal={closeCreate} />
-            <UpdateItemModal visible={showUpdateModal} itemId={selectedItem} closeModal={closeUpdate} />
-            <DeleteItemModal visible={showDeleteModal} itemId={selectedItem} closeModal={closeDelete} />
+            <LoadingModal visible={isLoading} />
+            <UpdateListModal visible={showUpdateListModal} listId={listId} listName={listName} closeModal={closeListUpdate} />
+            <DeleteListModal visible={showDeleteListModal} listId={listId} closeModal={closeListDelete} />
+            <CreateItemModal visible={showCreateItemModal} listId={listId} closeModal={closeItemCreate} />
+            <UpdateItemModal visible={showUpdateItemModal} itemId={selectedItem && selectedItem.id} itemDesc={selectedItem && selectedItem.description} closeModal={closeItemUpdate} />
+            <DeleteItemModal visible={showDeleteItemModal} itemId={selectedItem && selectedItem.id} itemDesc={selectedItem && selectedItem.description} closeModal={closeItemDelete} />
+            <View style={styles.listHeader}>
+                <Text style={styles.listHeaderTitle}>{listName}</Text>
+                <View>
+                    <Menu>
+                        <MenuTrigger>
+                            <ThreeDotsImg width={30} height={30} />
+                        </MenuTrigger>
+                        <MenuOptions customStyles={{
+                            optionsContainer: {
+                                marginTop: 40,
+                            },
+                        }}>
+                            <MenuOption onSelect={() => { setShowUpdateListModal(true); }} >
+                                <Text style={styles.menuText}>Update</Text>
+                            </MenuOption>
+                            <MenuOption onSelect={() => { setShowDeleteListModal(true); }} >
+                                <Text style={styles.menuText}>Delete</Text>
+                            </MenuOption>
+                        </MenuOptions>
+                    </Menu>
+                </View>
+            </View>
             <ScrollView>
                 {
                     todoItems && todoItems.map((item: any) => {
                         return (
-                            <View style={styles.itemContainer}>
-                                <TodoItem key={item.id} item={item} openUpdate={openUpdate} openDelete={openDelete} />
+                            <View key={item.id} style={styles.itemContainer}>
+                                <TodoItem item={item} openUpdate={() => {
+                                    setSelectedItem(item);
+                                    setShowUpdateItemModal(true);
+                                }} openDelete={() => {
+                                    setSelectedItem(item);
+                                    setShowDeleteItemModal(true);
+                                }} />
                                 <View style={styles.divider} />
                             </View>
                         );
                     })
                 }
             </ScrollView>
-            <Button title="Add item" onPress={() => { setShowCreateModal(true); }} />
+            <FloatingAdd style={styles.floatingRightButton} onPress={() => { setShowCreateItemModal(true); }} />
         </SafeAreaView>
     );
 };

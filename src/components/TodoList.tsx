@@ -1,14 +1,19 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, Button } from 'react-native';
 import styles from '../styles/Style';
-import { UpdateButton, RightChevron } from './SmallComponents';
+import { RightChevron } from './SmallComponents';
 
 const TodoList = (props: any): React.JSX.Element => {
+    /**
+     * Component for each todo list on the home page
+     */
     let listInfo = props.list;
     return (
         <TouchableOpacity onPress={() => {
             props.navigation.navigate('Items', {
                 listId: listInfo.id,
+                listName: listInfo.name,
+                notifyChange: props.notifyChange,
             });
         }}>
             <View style={styles.listOuterContainer}>
@@ -18,10 +23,7 @@ const TodoList = (props: any): React.JSX.Element => {
                     </Text>
                 </View>
                 <View style={styles.buttonContainer}>
-                    {/* <UpdateButton style={styles.buttonImage} onPress={() => { props.openUpdate(listInfo.id); }} /> */}
                     <RightChevron />
-                    {/* <Button title="Update" onPress={() => { props.openUpdate(listInfo.id); }} /> */}
-                    {/* <Button title="Delete" onPress={() => { props.openDelete(listInfo.id); }} /> */}
                 </View>
             </View>
         </TouchableOpacity>
