@@ -1,6 +1,8 @@
 # Todo List App
 A simple todo list app written in React Native (TypeScript).
 
+Here's a video demo: https://youtu.be/pR5UTVapN4w
+
 ## Step 1: Start the Metro Server
 
 Start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
