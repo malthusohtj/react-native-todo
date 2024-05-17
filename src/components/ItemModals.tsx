@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { View, Text, Button, Modal, TextInput } from 'react-native';
 import { InputModal, OptionModal } from './SmallComponents';
 
 const CreateItemModal = (props: any): React.JSX.Element => {
@@ -11,7 +10,8 @@ const CreateItemModal = (props: any): React.JSX.Element => {
     async function createItem() {
         try {
             // API: Create new todo item
-            await fetch('https://ttm-todo-sample.herokuapp.com/api/todos',
+            const { itemsURL } = require('../../secrets.json');
+            await fetch(itemsURL,
                 {
                     method: 'POST',
                     headers: {
@@ -23,7 +23,10 @@ const CreateItemModal = (props: any): React.JSX.Element => {
                         todo_list_id: props.listId,
                     }),
                 }
-            ).then(() => {
+            ).then((res) => {
+                return res.json();
+            }).then((data) => {
+                console.log(data);
                 props.closeModal(true);
             });
         } catch (e) {
@@ -54,7 +57,8 @@ const UpdateItemModal = (props: any): React.JSX.Element => {
     async function updateItem() {
         try {
             // API: Update name of existing todo list
-            await fetch('https://ttm-todo-sample.herokuapp.com/api/todos/' + props.itemId,
+            const { itemsURL } = require('../../secrets.json');
+            await fetch(itemsURL + '/' + props.itemId,
                 {
                     method: 'PATCH',
                     headers: {
@@ -96,7 +100,8 @@ const DeleteItemModal = (props: any): React.JSX.Element => {
     async function deleteItem() {
         try {
             // API: Update name of existing todo list
-            await fetch('https://ttm-todo-sample.herokuapp.com/api/todos/' + props.itemId,
+            const { itemsURL } = require('../../secrets.json');
+            await fetch(itemsURL + '/' + props.itemId,
                 {
                     method: 'DELETE',
                 }

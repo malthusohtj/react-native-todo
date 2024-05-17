@@ -10,7 +10,8 @@ const CreateListModal = (props: any): React.JSX.Element => {
     async function createList() {
         try {
             // API: Create new todo list
-            await fetch('https://ttm-todo-sample.herokuapp.com/api/todo-lists',
+            const { listsURL } = require('../../secrets.json');
+            await fetch(listsURL,
                 {
                     method: 'POST',
                     headers: {
@@ -21,7 +22,10 @@ const CreateListModal = (props: any): React.JSX.Element => {
                         name: listName,
                     }),
                 }
-            ).then(() => {
+            ).then((res) => {
+                return res.json();
+            }).then((data) => {
+                console.log(data);
                 props.closeModal(true);
             });
         } catch (e) {
@@ -52,7 +56,8 @@ const UpdateListModal = (props: any): React.JSX.Element => {
     async function updateList() {
         try {
             // API: Update name of existing todo list
-            await fetch('https://ttm-todo-sample.herokuapp.com/api/todo-lists/' + props.listId,
+            const { listsURL } = require('../../secrets.json');
+            await fetch(listsURL + '/' + props.listId,
                 {
                     method: 'PATCH',
                     headers: {
@@ -95,21 +100,22 @@ const DeleteListModal = (props: any): React.JSX.Element => {
         try {
             let todoItems;
             // API: Get all todo items for this list
-            await fetch('https://ttm-todo-sample.herokuapp.com/api/todo-lists/' + props.listId
+            const { listsURL, itemsURL } = require('../../secrets.json');
+            await fetch(listsURL + '/' + props.listId
             ).then(res => { return res.json(); }
             ).then(data => {
                 todoItems = data.todos;
                 let deleteTasks = [];
                 // API: Delete all todo items
                 for (const item of todoItems) {
-                    deleteTasks.push(fetch('https://ttm-todo-sample.herokuapp.com/api/todos/' + item.id,
+                    deleteTasks.push(fetch(itemsURL + '/' + item.id,
                         {
                             method: 'DELETE',
                         }
                     ));
                 }
                 // API: Delete todo list
-                deleteTasks.push(fetch('https://ttm-todo-sample.herokuapp.com/api/todo-lists/' + props.listId,
+                deleteTasks.push(fetch(listsURL + '/' + props.listId,
                     {
                         method: 'DELETE',
                     }

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-import { Text, View, ScrollView, SafeAreaView, Button } from 'react-native';
+import { Text, View, ScrollView, SafeAreaView } from 'react-native';
 import styles from '../styles/Style';
 import TodoItem from '../components/TodoItem';
 import { CreateItemModal, DeleteItemModal, UpdateItemModal } from '../components/ItemModals';
@@ -34,7 +34,8 @@ const Details = ({ route, navigation }: any): React.JSX.Element => {
          */
         try {
             // API: Fetch all todo items for this list
-            await fetch('https://ttm-todo-sample.herokuapp.com/api/todo-lists/' + listId,
+            const { listsURL } = require('../../secrets.json');
+            await fetch(listsURL + '/' + listId,
                 {
                     method: 'GET',
                     headers: {
@@ -57,8 +58,9 @@ const Details = ({ route, navigation }: any): React.JSX.Element => {
     async function fetchTodoList() {
         /**
          * Fetches metadata for this particular list
-         */
-        await fetch('https://ttm-todo-sample.herokuapp.com/api/todo-lists/' + listId,
+        */
+        const { listsURL } = require('../../secrets.json');
+        await fetch(listsURL + '/' + listId,
             {
                 method: 'GET',
                 headers: {

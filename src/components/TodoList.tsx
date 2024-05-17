@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, Text, Button } from 'react-native';
+import { View, TouchableOpacity, Text } from 'react-native';
 import styles from '../styles/Style';
 import { RightChevron } from './SmallComponents';
 

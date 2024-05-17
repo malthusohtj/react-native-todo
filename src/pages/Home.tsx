@@ -13,6 +13,7 @@ const Home = ({ navigation }: any): React.JSX.Element => {
      */
     const [isLoading, setLoading] = useState<boolean>(true);
     const [todoData, setTodoData] = useState([]);
+
     const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
 
     // Fetch all todo lists when home screen is in "focus" state (React Navigation)
@@ -28,7 +29,8 @@ const Home = ({ navigation }: any): React.JSX.Element => {
         try {
             setLoading(true);
             // Fetch all todo lists (without "todos" attribute)
-            await fetch('https://ttm-todo-sample.herokuapp.com/api/todo-lists', {
+            const { listsURL } = require('../../secrets.json');
+            await fetch(listsURL, {
                 method: 'GET',
                 headers: {
                     Accept: 'application/json',

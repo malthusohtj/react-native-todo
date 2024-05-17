@@ -16,7 +16,8 @@ const TodoItem = (props: any): React.JSX.Element => {
         /**
          * Updates the is_done field of the todo item
          */
-        await fetch('https://ttm-todo-sample.herokuapp.com/api/todos/' + itemInfo.id,
+        const { itemsURL } = require('../../secrets.json');
+        await fetch(itemsURL + '/' + itemInfo.id,
             {
                 method: 'PATCH',
                 headers: {
